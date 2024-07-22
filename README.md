@@ -60,7 +60,8 @@ All commands in this README assume you are running them under the `src` director
         python same/test.py
         ```
         - Given a source motion (left) and a random target skeleton (middle), retargeted result (right).   
-        - Source and target skeleton are masked (some joints of the skeleton are removed) randomly.
+        - Source and target skeleton are masked (some joints are removed) randomly. 
+
     
     - Quantitative Evaluation (Table 1,2): 
         ```
@@ -177,7 +178,6 @@ For a more detailed explanation of the notations and algorithms, please refer to
     - If the motion is too long, we cut our motions into reasonable length (e.g., 10 seconds) to balance the motion length with other short motion clips. This step is optional.
 
 #### 1.2 Augment data
-<!-- You can either augment motion pairs by automated script using MotionBuilder, or  -->
 Here we explain how to augment Skeleton dataset $S$ and Motion dataset $M$ into $S'$ and $M'$.   
 - install Autodesk MotionBuilder. Autodesk supports education license for students.
 - Modify the following settings in `mobu_script/mobu_retarget.py`
@@ -198,7 +198,7 @@ Here we explain how to augment Skeleton dataset $S$ and Motion dataset $M$ into 
 
     - The result is generated under `data/[DATA_NAME]/motion/`.
         - `result`: retargeted motions (filenames: 0.bvh, 1.bvh, ...)
-        - Additionally, `character.txt`, `fileList.txt`, `pair.txt` file is generated.    
+        - Additionally, `character.txt`, `fileList.txt`, `pair.txt` are generated.    
         For the detail of the information each file contains, please refer to `mobu_retarget.py`
         - Caution: Motionbuilder may crash if you try to mainpulate the UI while running the script. It's better to leave it do its job and wait... If it crashed in the middle, we have continue options (`fresh_start=False`) so that you don't have to re-start all over again.
         <details>
@@ -231,9 +231,9 @@ Process a paired motion dataset(.bvh files) to .npz files.
 python preprocess/preprocess_data.py --data [DATA_NAME]
 
 --train     : when processing a training dataset. 
-            If you turn on the flag, mean/std statistics of data are computed and saved during training. 
-            (For test dataset, turn this off so the statistics won't be computed 
-            For inference, values from for training dataset will be used automatically.)
+            If you turn on the flag, mean/std statistics of data are computed and saved. 
+            (For the test dataset, turn this off so the statistics won't be computed. 
+            Statistics from the training dataset will be used automatically during inference.)
 --wopair    : when using a dataset without augmented pairs (i.e., w/o pair.txt)
 --append_log: when continuing the process (killed unexpectedly) or when merging multiple dataset
 ```

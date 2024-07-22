@@ -121,9 +121,9 @@ if __name__ == "__main__":
     parser.add_argument("--model_epoch", type=str, default="ckpt0")
     parser.add_argument("--device", type=str, default="cuda:0")
     parser.add_argument("--data_dir", type=str, default="test/motion/processed/")
-    parser.add_argument("--rnd_tgt", action="store_true", default=True)
-    parser.add_argument("--src_mask", action="store_true", default=True)
-    parser.add_argument("--tgt_mask", action="store_true", default=True)
+    parser.add_argument("--rnd_tgt", type=int, default=1)
+    parser.add_argument("--src_mask", type=int, default=1)
+    parser.add_argument("--tgt_mask", type=int, default=1)
 
     args = parser.parse_args()
 
