@@ -1,0 +1,62 @@
+train_data:
+  dir: train/motion/processed
+  mask: [src, tgt]
+
+representation:
+  skel: [lo, go] # S
+  pose: [q, p, r, pv, qv, pprev, c] # D_t
+  out: [r, q, c] # \hat{D_t}
+
+model:
+  z_dim: 32
+  Encoder:
+      type: GATEnc
+      hid_lyrs: [16, 16, 16]
+      heads_num: 16
+  Decoder:
+      type: GATDec
+      hid_lyrs: [16, 16, 16]
+      heads_num: 16
+      tgt_all_lyr: True
+  # load: 
+  #   - dir: blahblah
+  #     epoch: 
+  #     prefix: encoder
+  #     freeze: True
+
+train:
+  consq_n: 8
+  batch_size: 256 # 512 if GPU memory allows
+  grad_max_norm: 0.5
+  learning_rate: 0.01
+  
+  lr_schedule: 
+    type: exponential
+    gamma: 0.99
+    min: 0.01
+
+  epoch_num: 300
+  save_per: 30
+
+  # load trainer to continue training
+  # load:
+  #   dir: prev_trainer
+  #   epoch: None
+
+  # misc
+  copy_orig_contact: False
+
+  loss:
+    q: 5
+    p: 0.01
+    r: 10
+    pv: 1
+    c: 1
+    cv: 6
+    z: 1
+    pen: 0.1
+    slide: 6
+    jerk: 0.2
+
+  metric: [qR, ra_xz, pa, slide, jerk, pen] 
+

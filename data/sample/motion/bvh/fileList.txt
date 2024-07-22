@@ -1,0 +1,5 @@
+0, 0, sample/motion/bvh/ACAAD/Female1_A05_PickUpBox_0.bvh
+0, 1, sample/motion/bvh/pfnn/LocomotionFlat01_000_3.bvh
+0, 2, sample/motion/bvh/lafan1/aiming1_subject1_0.bvh
+1, 0, sample/motion/bvh/SFU/0005_JumpRope001_0.bvh
+1, 1, sample/motion/bvh/TotalCapture/acting1_BlenderZXY_YmZ_5.bvh
