@@ -124,7 +124,6 @@ if __name__ == "__main__":
     for epoch_cnt in tqdm(range(epoch_init, train_cfg["epoch_num"])):
         epoch_loss = {loss: 0 for loss in list(train_cfg["loss"].keys()) + ["total"]}
         epoch_metric = {metric: 0 for metric in train_cfg["metric"]}
-        grad_min, grad_max, grad_mean = 1e8, 0, 0
         for bi, (src_batch, tgt_batch) in enumerate(dl):
             optimizer.zero_grad()
 
@@ -145,18 +144,6 @@ if __name__ == "__main__":
 
             ## backward
             loss["total"].backward()
-
-            # Calculate and log gradient statistics before clipping
-            param_Grads = []
-            for param in model.parameters():
-                if param.grad is not None:
-                    param_Grads.append(param.grad.view(-1))
-            norms = torch.stack(torch._foreach_norm(param_Grads))
-            total_norm = torch.linalg.vector_norm(norms)
-            grad_min = min(grad_min, total_norm)
-            grad_max = max(grad_max, total_norm)
-            grad_mean += total_norm.item()
-
             torch.nn.utils.clip_grad_norm_(
                 model.parameters(), train_cfg["grad_max_norm"]
             )
@@ -186,10 +173,6 @@ if __name__ == "__main__":
         for k, v in epoch_metric.items():
             writer.add_scalar("metric/" + k, v / len(dl), epoch_cnt)
         writer.add_scalar("lr", optimizer.param_groups[0]["lr"], epoch_cnt)
-        # Log to TensorBoard
-        writer.add_scalar("Gradient/min", grad_min, epoch_cnt)
-        writer.add_scalar("Gradient/max", grad_max, epoch_cnt)
-        writer.add_scalar("Gradient/mean", grad_mean / len(dl), epoch_cnt)
 
         ## Save
         if (epoch_cnt % train_cfg["save_per"] == 0) or (

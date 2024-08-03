@@ -55,7 +55,7 @@ Keyboard
 All commands in this README assume you are running them under the `src` directory.
 
 - SAME Autoencoder:    
-    - Quantitative Evaluation: 
+    - Qualitative Evaluation: 
         ```
         python same/test.py
         ```
@@ -75,7 +75,7 @@ All commands in this README assume you are running them under the `src` director
         ```
         python task/arithmetic/main.py 
         ```
-        - Given motions `M_b, M_p, M_m` (Left three motions) and a scale `s` which may have different skeletons, we demonstrate arithmetic operation in SAME space `Z_b + s * (Z_p - Z_m)` realized to a random character(Rightmost). Press `[m]` to see next result.
+        - Given motions `M_b, M_p, M_m` (Left three motions) which may have different skeletons and a scale `s`, we demonstrate arithmetic operation in SAME space `Z_b + s * (Z_p - Z_m)` realized to a random character(Rightmost). Press `[m]` to see next result.
 
     - Similar Motion Search: 
         ```
@@ -94,7 +94,7 @@ All commands in this README assume you are running them under the `src` director
         ```
         python task/motion_control/main.py   
         ```
-        - Motion matching operates in SAME-space according to auto-generated user control input. 
+        - Run motion matching in SAME-space according to auto-generated user control input. 
         - To try morphing the character on the fly as in the demo video, add the `--demo skel_change` argument. Character morphing will occur about 16 seconds after starting.   
 
 </br>
@@ -179,13 +179,13 @@ For a more detailed explanation of the notations and algorithms, please refer to
 
 #### 1.2 Augment data
 Here we explain how to augment Skeleton dataset $S$ and Motion dataset $M$ into $S'$ and $M'$.   
-- install Autodesk MotionBuilder. Autodesk supports education license for students.
+- Install Autodesk MotionBuilder. Autodesk supports education license for students.
 - Modify the following settings in `mobu_script/mobu_retarget.py`
     - specify `DATA_DIR`, `DATA_NAME`
-    - `batch_size`: retarget motion batch size per each random skeleton ($B$ in algorithm 2.)
+    - `batch_size`: motion batch size to retarget per each random skeleton ($B$ in algorithm 2.)
     - `iter_num`: number of retargeting iteration ($R$ in algorithm 2.)
-    - `merge_skel`: True if not using any skeletal variations
-    - `fresh_start`: In case you stopped retargeting script and wish to continue from where you stopped (rather than retargeting all over again), set `fresh_start= False`.    
+    - `merge_skel`: whether to use a single target skeleton (True if not using any skeletal variations)
+    - `fresh_start`: in case you stopped retargeting script and wish to continue from where you stopped (rather than retargeting all over again), set `fresh_start= False`.    
     Otherwise use True as default.
     - If bvh files contains joint names that are not included in Mobu joint names, add it to `joint_candidates`. Please refer to the code comments for more detail.
     - We removed finger joints from all data. If you want to include finger joints and retarget them, you may modify the `jointList` and `joint_candidates` properly to characterize and retarget fingers as well.
@@ -234,8 +234,8 @@ python preprocess/preprocess_data.py --data [DATA_NAME]
             If you turn on the flag, mean/std statistics of data are computed and saved. 
             (For the test dataset, turn this off so the statistics won't be computed. 
             Statistics from the training dataset will be used automatically during inference.)
---wopair    : when using a dataset without augmented pairs (i.e., w/o pair.txt)
---append_log: when continuing the process (killed unexpectedly) or when merging multiple dataset
+--wopair    : when using a dataset without augmented pairs (i.e., w/o pair.txt).
+--append_log: when continuing the process (killed unexpectedly) or when merging multiple dataset.
 ```
 
 <details>
@@ -276,7 +276,7 @@ python preprocess/preprocess_data.py --data [DATA_NAME]
 ---
 ### 2. Skeleton-Agnostic Motion AutoEncoder
 #### 2.1 Train
-Create a config file (e.g., `config/mycfg`) and specify `train_data` as the dataset you created from Step 1
+Create a config file (e.g., `config/mycfg.yml`) and specify `train_data` as the dataset you created from Step 1.
 ```
 # train
 python same/train.py --config [CFG_NAME] --exp [EXP_NAME]
@@ -365,7 +365,7 @@ task/motion_control/main.py
 --data_dir      [data_dir]
 
 *Note: There are also many parameters you can choose for motion matching; 
-you may tune according to your own taste or depending on the motion dataset/control logic.
+you may tune according to the motion dataset, control logic, and your taste for performance.
 ```
 
 <details> 

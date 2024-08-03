@@ -243,9 +243,6 @@ def FK(lo, qR, r, root_ids, skel_depth, skel_edge_index):
     joint_T[root_ids, 1, 3] = r[..., 3].flatten()  # height?
     joint_T[..., 3, 3] = 1
 
-    # CAUTION:
-    # we assign skel_depth = -1 for non parent-child edges (e.g. end-effector edges) to avoid wrong FK
-
     for i in range(skel_depth.max() + 1):
         depth_i_idx = torch.where(skel_depth == i)[0]
         depth_i_edge = skel_edge_index[:, depth_i_idx]
